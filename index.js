@@ -1,16 +1,18 @@
-// const fs = require('fs')
+const { pseudoRandomBytes } = require('crypto');
+const fs = require('fs');
 const inquirer = require('inquirer');
-// const generateMarkdown = require('./utils/generateMarkdown.js')
+const generateMarkdown = require('./utils/generateMarkdown.js');
 
 const questions = [
     {
         type: 'input',
-        name: 'project-title',
+        name: 'projectTitle',
         message: 'What is the title of your project?',
         validate: input => {
             if (input) {
                 return true;
             } else {
+                console.log('Please enter a valid title for your project.');
                 return false;
             }
         }
@@ -132,7 +134,7 @@ const questions = [
             if (input) {
                 return true;
             } else {
-                console.log('Please enter a valid Github username.')
+                console.log('Please enter a valid Github username.');
                 return false;
             }
         }
@@ -143,22 +145,50 @@ const questions = [
         message: 'Please enter your email address:',
         validate: input => {
             if (input) {
-                return true
+                return true;
             } else {
-                console.log('Please enter a valid email address.')
-                return false
+                console.log('Please enter a valid email address.');
+                return false;
             }
         }
-    }
+    },
+    {
+        type: 'input',
+        name: 'contributions',
+        message: 'Please enter contribution guidelines for your project: ',
+        validate: input => {
+            if (input) {
+                return true;
+            } else {
+                console.log("Please enter valid contribution guidelines.");
+                return false;
+            }
+        }
+    },
 ];
 
-// TODO: Create a function to write README file
-// function writeToFile(fileName, data) {}
-
-// TODO: Create a function to initialize app
-function init() {
-    inquirer.prompt(questions);
+function writeToFile(data) {
+    return new Promise ((resolve, reject) => {
+        fs.writeFile(`./dist/README.md`, data, err => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve ({
+                ok: true,
+                message: 'README has been created! Please check /dist to see your README file.'
+            })
+        })
+    })
 }
+
+function init() {
+    inquirer.prompt(questions)
+    .then(answers => generateMarkdown(answers))
+    .then(markdown => writeToFile(markdown))
+    .then(writeFileResponse => console.log(writeFileResponse.message))
+    .catch(err => console.log(err))
+} 
 
 // Function call to initialize app
 init();
