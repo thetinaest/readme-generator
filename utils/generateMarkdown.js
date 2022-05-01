@@ -3,7 +3,7 @@ function renderLicenseBadge(license) {
   if (license === 'none') {
     return '';
   } else {
-    return `[![License](https://img.dhields.io/badge/License-${license.badge}-blue.svg)](${license.link})`;
+    return `[![License](https://img.shields.io/badge/License-${license.badge}-blue.svg)](https://opensource.org/licenses/${license.badge})`;
   }
 }
 
@@ -59,6 +59,8 @@ function generateMarkdown(response) {
 
   ## Email
   [${response.email}](mailto:${response.email})
+
+  ${renderLicenseSection(response.license)}
 `;
 }
 
