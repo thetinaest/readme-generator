@@ -1,9 +1,22 @@
 // If there is no license, return an empty string
 function renderLicenseBadge(license) {
+  //generates the correct color of license
+  function licenseColor(license) {
+  if (license.name === 'MIT License') {
+      return 'yellow.svg';
+    } else if (license.name === 'Mozilla Public License 2.0') {
+      return 'brightgreen.svg';
+    } else if (license.name === 'Boost Software License 1.0') {
+      return 'lightblue.svg';
+    } else {
+      return 'blue.svg';
+    }
+  }
+
   if (license === 'none') {
     return '';
   } else {
-    return `[![License](https://img.shields.io/badge/License-${license.badge}-blue.svg)](https://opensource.org/licenses/${license.badge})`;
+    return `[![License](https://img.shields.io/badge/License-${license.badge}-${licenseColor(license)})](https://opensource.org/licenses/${license.badge})`;
   }
 }
 
@@ -21,12 +34,12 @@ function renderLicenseSection(license) {
   if (license === 'none') {
     return '';
   } else {
-    return `## License : 
+    return `## License
     [${license.name}](${license.link})`;
   }
 }
 
-// TODO: Create a function to generate markdown for README
+//generates markdown using user answers
 function generateMarkdown(response) {
   return `# ${response.projectTitle}
   ${renderLicenseBadge(response.license)}
@@ -54,11 +67,10 @@ function generateMarkdown(response) {
   ## Tests
   ${response.testing}
 
-  ## GitHub
-  [Github](https://guthub.com/${response.username})
-
-  ## Email
-  [${response.email}](mailto:${response.email})
+  ## Questions 
+  If you have any questions, please contact me using the following links: 
+  - Please visit my [Github](https://guthub.com/${response.username})
+  - Please email me at [${response.email}](mailto:${response.email})
 
   ${renderLicenseSection(response.license)}
 `;

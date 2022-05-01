@@ -1,8 +1,9 @@
-const { pseudoRandomBytes } = require('crypto');
+//requriements
 const fs = require('fs');
 const inquirer = require('inquirer');
 const generateMarkdown = require('./utils/generateMarkdown.js');
 
+//array of questions to be used with inquirer
 const questions = [
     {
         type: 'input',
@@ -167,6 +168,7 @@ const questions = [
     },
 ];
 
+//creates readme file in dist folder
 function writeToFile(data) {
     return new Promise ((resolve, reject) => {
         fs.writeFile(`./dist/README.md`, data, err => {
@@ -182,6 +184,7 @@ function writeToFile(data) {
     })
 }
 
+//initializes app
 function init() {
     inquirer.prompt(questions)
     .then(answers => generateMarkdown(answers))
